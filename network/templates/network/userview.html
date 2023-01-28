@@ -1,0 +1,31 @@
+{% extends 'network/layout.html' %}
+{% load static %}
+
+{% block body %}
+<div id="queried-user-info">
+    <div id="queried-user-username">
+        <h1 ><a class="link-container" href="{% url 'user-view' queried_user.username %}">{{ queried_user.username }}</a></h1>
+    </div>
+    <div id="following" class="link-container"><a href="{% url 'following' queried_user.username %}">
+            {{queried_user.following.all.count }}
+            following</a></div>
+    <div id="followers" class="link-container"><a href="{% url 'followers' queried_user.username %}">{{queried_user.followers.all.count }} followers</a></div>
+    {% if queried_user.username != user.username %}
+    <div id="followunfollow">
+        <form action="{% url 'follow-unfollow' queried_user.username %}" method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-outline-dark" id="follow-unfollow">
+                {% if user in queried_user.followers.all %} Unfollow {% else %} Follow {% endif %}</button>
+        </form>
+    </div>
+    {% endif %}
+</div>
+<div id="queried-user-posts">
+    {% for post in posts_page %}
+    {% include 'network/individualpost.html' with post=post %}
+    <hr>
+    {% endfor %}
+</div>
+{% include 'network/pagination.html' with posts_page=posts_page %}
+
+{% endblock %}

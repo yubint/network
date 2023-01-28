@@ -1,0 +1,16 @@
+{% if post %}
+
+<div class="post" id="{{post.pk}}-post" data-postid={{post.pk}}>
+    <div class="post-text">{{ post.text }}</div>
+    <div class="link-container post-user"><a href="{% url 'user-view' post.user %}">{{ post.user }}</a></div>
+    <div class="post-date">{{ post.posted_on }}</div>
+    {% if user.username == post.user.username %}
+    <button class="btn btn-outline-dark edit-post">Edit</button>
+    {% endif %}
+    <div class="likes">
+        <div class="{% if user.username == post.user.username %}poster{% else %} like-button {% endif %}" data-liked="{% if user in post.liked_by.all %}true{% else %}false{% endif %}"></div>
+        <span class='like-count'>{{ post.liked_by.all.count }}</span>
+    </div>
+</div>
+
+{% endif %}

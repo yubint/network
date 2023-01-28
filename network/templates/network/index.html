@@ -1,0 +1,32 @@
+{% extends "network/layout.html" %}
+
+{% block body %}
+{% if user.is_authenticated %}
+<div id="new-post">
+    New Post
+    <form action="{% url 'new-post' %}" method="POST" id="new-post-form">
+        <textarea required name="text" id="new-post-text"  rows="2" class="mb-2"
+            onkeyup="if (this.scrollHeight > this.clientHeight) this.style.height =`${this.scrollHeight}px`;"></textarea>
+        <button class="btn btn-outline-dark" type="submit">Post</button>
+        {% csrf_token %}
+    </form>
+</div>
+{% endif %}
+<div id="posts">
+    {% if posts_page|length == 0 %}
+    <div>
+        Oops there aren't any posts to show. Add a new post or follow others
+    </div>
+    {% else %}
+    {% for post in posts_page %}
+    {% include 'network/individualpost.html' with post=post %}
+    <hr>
+    {% endfor %}
+    {% endif %}
+</div>
+{% endblock %}
+{% block pagination %}
+{% if posts_page.paginator.num_pages > 1 %}
+{% include 'network/pagination.html' with posts_page=posts_page %}
+{% endif %}
+{% endblock %}

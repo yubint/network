@@ -1,0 +1,19 @@
+{% extends 'network/layout.html' %}
+{% block body %}
+<div id="queried-user-username"><a href="{% url 'user-view' queried_user.username %}">{{queried_user.usrename}}</a>
+</div>
+<div id="follow-list">
+    <ul>
+        {% if followers %}
+        <h2>Followers</h2>
+        {% elif following %}
+        <h2> Following</h2>
+        {% endif %}
+        {% for individual_user in user_list %}
+        <li>
+            <a href="{% url 'user-view' individual_user.username %}">{{ individual_user.username }}</a>
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}
